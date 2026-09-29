@@ -171,6 +171,19 @@
       border-radius: 8px;
       vertical-align: middle;
     }
+    /* "New" indicator for unwatched videos — coral accent, matching the ARC app's own
+       badge convention (src/global.scss: ion-badge { background: var(--coral-accent) }) */
+    .coral-badge {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 2px 8px;
+      background: #DD633C;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 8px;
+      vertical-align: middle;
+    }
     .view-btn {
       display: inline-block;
       padding: 6px 18px;
@@ -344,7 +357,7 @@
       <div class="material-item">
         <div class="material-info">
           <span class="material-icon">🎬</span>
-          <span class="material-title">Dashboard Walkthrough Video</span>
+          <span class="material-title">Dashboard Walkthrough Video<span class="coral-badge" data-video="General%20Dashboard.mov">New</span></span>
         </div>
         <a href="#" class="view-btn" onclick="openVideoModal('General%20Dashboard.mov'); return false;">View</a>
       </div>
@@ -356,7 +369,7 @@
       <div class="material-item">
         <div class="material-info">
           <span class="material-icon">🎬</span>
-          <span class="material-title">Operations walkthrough video</span>
+          <span class="material-title">Operations walkthrough video<span class="coral-badge" data-video="General%20Operations.mov">New</span></span>
         </div>
         <a href="#" class="view-btn" onclick="openVideoModal('General%20Operations.mov'); return false;">View</a>
       </div>
@@ -377,7 +390,7 @@
       <div class="material-item">
         <div class="material-info">
           <span class="material-icon">🎬</span>
-          <span class="material-title">Tanks Walkthrough Video</span>
+          <span class="material-title">Tanks Walkthrough Video<span class="coral-badge" data-video="General%20Tanks.mov">New</span></span>
         </div>
         <a href="#" class="view-btn" onclick="openVideoModal('General%20Tanks.mov'); return false;">View</a>
       </div>
@@ -435,7 +448,7 @@
       <div class="material-item">
         <div class="material-info">
           <span class="material-icon">🎬</span>
-          <span class="material-title">How to Manage the Three Volunteer Accounts</span>
+          <span class="material-title">How to Manage the Three Volunteer Accounts<span class="coral-badge" data-video="How%20to%20manage%20the%20three%20volunteer%20accounts.mov">New</span></span>
         </div>
         <a href="#" class="view-btn" onclick="openVideoModal('How%20to%20manage%20the%20three%20volunteer%20accounts.mov'); return false;">View</a>
       </div>
@@ -482,12 +495,33 @@
       });
     }
 
+    // "New" coral badge tracking — persists (localStorage, not sessionStorage) across visits
+    // so a video's badge disappears permanently once opened, not just for the current session.
+    const WATCHED_KEY_PREFIX = 'arc_training_watched_';
+
+    function markVideoWatched(src) {
+      localStorage.setItem(WATCHED_KEY_PREFIX + src, '1');
+      document.querySelectorAll(`.coral-badge[data-video="${src}"]`).forEach(badge => {
+        badge.style.display = 'none';
+      });
+    }
+
+    function applyWatchedBadges() {
+      document.querySelectorAll('.coral-badge[data-video]').forEach(badge => {
+        const src = badge.getAttribute('data-video');
+        if (localStorage.getItem(WATCHED_KEY_PREFIX + src)) {
+          badge.style.display = 'none';
+        }
+      });
+    }
+
     function openVideoModal(src) {
       const modal = document.getElementById('videoModal');
       const player = document.getElementById('videoPlayer');
       player.src = src;
       modal.classList.add('open');
       player.play();
+      markVideoWatched(src);
     }
 
     function closeVideoModal() {
@@ -518,6 +552,7 @@
         document.getElementById('passwordScreen').style.display = 'none';
         document.getElementById('trainingScreen').style.display = 'block';
         applyRole(role);
+        applyWatchedBadges();
         updateBackground();
       } else {
         document.getElementById('errorMsg').style.display = 'block';
@@ -540,6 +575,7 @@
       document.getElementById('passwordScreen').style.display = 'none';
       document.getElementById('trainingScreen').style.display = 'block';
       applyRole(savedRole);
+      applyWatchedBadges();
     }
     updateBackground();
   </script>

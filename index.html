@@ -233,6 +233,48 @@
       color: rgba(255,255,255,0.6);
       font-size: 12px;
     }
+
+    /* Video modal (in-page playback instead of downloading/navigating away) */
+    .video-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .video-modal.open {
+      display: flex;
+    }
+    .video-modal-content {
+      position: relative;
+      width: 100%;
+      max-width: 960px;
+    }
+    .video-modal-content video {
+      width: 100%;
+      max-height: 80vh;
+      border-radius: 10px;
+      background: #000;
+      display: block;
+    }
+    .video-modal-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 32px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+    .video-modal-close:hover {
+      color: #ccc;
+    }
   </style>
 </head>
 <body>
@@ -295,7 +337,7 @@
           <span class="material-icon">🎬</span>
           <span class="material-title">Dashboard Walkthrough Video</span>
         </div>
-        <a href="General%20Dashboard.mov" class="view-btn">View</a>
+        <a href="#" class="view-btn" onclick="openVideoModal('General%20Dashboard.mov'); return false;">View</a>
       </div>
     </div>
 
@@ -307,7 +349,7 @@
           <span class="material-icon">🎬</span>
           <span class="material-title">Operations walkthrough video</span>
         </div>
-        <a href="General%20Operations.mov" class="view-btn">View</a>
+        <a href="#" class="view-btn" onclick="openVideoModal('General%20Operations.mov'); return false;">View</a>
       </div>
       <!-- Documentation (commented out for now)
       <div class="material-item" data-admin-only="true">
@@ -328,7 +370,7 @@
           <span class="material-icon">🎬</span>
           <span class="material-title">Tanks Walkthrough Video</span>
         </div>
-        <a href="General%20Tanks.mov" class="view-btn">View</a>
+        <a href="#" class="view-btn" onclick="openVideoModal('General%20Tanks.mov'); return false;">View</a>
       </div>
       <!-- Documentation (commented out for now)
       <div class="material-item" data-admin-only="true">
@@ -386,13 +428,21 @@
           <span class="material-icon">🎬</span>
           <span class="material-title">How to Manage the Three Volunteer Accounts</span>
         </div>
-        <a href="How%20to%20manage%20the%20three%20volunteer%20accounts.mov" class="view-btn">View</a>
+        <a href="#" class="view-btn" onclick="openVideoModal('How%20to%20manage%20the%20three%20volunteer%20accounts.mov'); return false;">View</a>
       </div>
     </div>
     <!-- TODO: replace placeholder "#" links above with real PDF/video URLs as materials are produced. To add a new item, copy a .material-item block and paste it inside the relevant .module-section (add data-admin-only="true" to restrict it to admins). -->
 
     <div class="footer">
       <p>&copy; 2026 ARC / Nature Seychelles. All rights reserved.</p>
+    </div>
+  </div>
+
+  <!-- Video Modal (plays local video files in-page instead of downloading) -->
+  <div id="videoModal" class="video-modal" onclick="if (event.target === this) closeVideoModal();">
+    <div class="video-modal-content">
+      <button class="video-modal-close" onclick="closeVideoModal()" aria-label="Close">&times;</button>
+      <video id="videoPlayer" controls></video>
     </div>
   </div>
 
@@ -422,6 +472,27 @@
         el.style.display = (role === 'admin') ? '' : 'none';
       });
     }
+
+    function openVideoModal(src) {
+      const modal = document.getElementById('videoModal');
+      const player = document.getElementById('videoPlayer');
+      player.src = src;
+      modal.classList.add('open');
+      player.play();
+    }
+
+    function closeVideoModal() {
+      const modal = document.getElementById('videoModal');
+      const player = document.getElementById('videoPlayer');
+      player.pause();
+      player.removeAttribute('src');
+      player.load();
+      modal.classList.remove('open');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeVideoModal();
+    });
 
     async function checkPassword() {
       const input = document.getElementById('passwordInput').value;

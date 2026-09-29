@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ARC Training Portal</title>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -127,6 +129,13 @@
       font-weight: 700;
       margin-bottom: 14px;
       color: #1d1d1f;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .module-section h4 ion-icon {
+      font-size: 20px;
+      flex-shrink: 0;
     }
     .material-item {
       display: flex;
@@ -322,7 +331,7 @@
 
     <!-- Dashboard -->
     <div class="module-section module-dashboard">
-      <h4>📊 Dashboard</h4>
+      <h4><ion-icon name="grid"></ion-icon> Dashboard</h4>
       <!-- Documentation (commented out for now)
       <div class="material-item">
         <div class="material-info">
@@ -343,7 +352,7 @@
 
     <!-- Operations -->
     <div class="module-section module-operations">
-      <h4>⚙️ Operations</h4>
+      <h4><ion-icon name="build"></ion-icon> Operations</h4>
       <div class="material-item">
         <div class="material-info">
           <span class="material-icon">🎬</span>
@@ -364,7 +373,7 @@
 
     <!-- Tanks -->
     <div class="module-section module-tanks">
-      <h4>🛢️ Tanks</h4>
+      <h4><ion-icon name="cube"></ion-icon> Tanks</h4>
       <div class="material-item">
         <div class="material-info">
           <span class="material-icon">🎬</span>
@@ -385,7 +394,7 @@
 
     <!-- Calendar -->
     <div class="module-section module-calendar">
-      <h4>📅 Calendar</h4>
+      <h4><ion-icon name="calendar"></ion-icon> Calendar</h4>
       <!-- Documentation (commented out for now)
       <div class="material-item">
         <div class="material-info">
@@ -406,7 +415,7 @@
 
     <!-- Settings (admin only module) -->
     <div class="module-section module-settings" data-admin-only="true">
-      <h4>🔒 Settings <span class="admin-badge">Admin only</span></h4>
+      <h4><ion-icon name="settings-outline"></ion-icon> Settings <span class="admin-badge">Admin only</span></h4>
       <!-- Documentation (commented out for now)
       <div class="material-item">
         <div class="material-info">
